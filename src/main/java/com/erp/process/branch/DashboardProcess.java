@@ -170,9 +170,7 @@ public class DashboardProcess {
 			}
 		}
 		/* Key, Value로 포장 */
-		for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
-			response.add(Map.of("name", entry.getKey(), "data", entry.getValue()));
-		}
+		map.forEach((key, value) -> response.add(Map.of("name", key, "data", value)));
 		return response;
 	}
 
