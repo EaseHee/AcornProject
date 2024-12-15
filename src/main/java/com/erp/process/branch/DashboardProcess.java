@@ -107,7 +107,7 @@ public class DashboardProcess {
 	 *     data: [21, 7, 25, 13, 22, 8],
 	 *   },
 	 * ],
-	 * 
+	 *
 	 * ==================== 자료 구조 ====================
 	 * List<Map<String, Object>>
 	 * 	Key : "name", Value : "서비스명"
@@ -138,7 +138,7 @@ public class DashboardProcess {
 		Map<String, List<Integer>> map = new LinkedHashMap<>();
 
 		/* 2> 단일 서비스 항목으로 Map 초기화 {서비스명, 배열} */
-		getSingleService().stream().forEach((service) -> {
+		getSingleService().forEach(service -> {
 			/* 매출액 저장용 배열 리스트 초기화 */
 			List<Integer> monthList = new ArrayList<>(12);
 			for (int i = 0; i < 12; i++) monthList.add(0);
@@ -154,25 +154,22 @@ public class DashboardProcess {
 			String name = String.valueOf(obj[0]);
 			int month = Integer.parseInt(String.valueOf(obj[1]));
 			int count = Integer.parseInt(String.valueOf(obj[2]));
-			int price =  Integer.parseInt(String.valueOf(obj[3]));
+			int price = Integer.parseInt(String.valueOf(obj[3]));
 			log.info("서비스명 : {}, "
 					+ "시술 월 : {}, "
 					+ "시술 횟수 : {}, "
-					+ "시술 비용 : {}", 
+					+ "시술 비용 : {}",
 					name, month, count, price);
-			
+
 			/* 복수 서비스 분할 작업 : 서비스 명에 , 구분자 포함 시 분할 후 데이터에 저장 */
 			for (String serviceName : name.split(",")) {
-				
 				int beforeRevenue = map.get(serviceName).get(month-1);
 				int revenue = count * price;
 				map.get(serviceName).set(month-1, beforeRevenue + revenue);
 			}
 		}
 		/* Key, Value로 포장 */
-		for (Map.Entry<String, List<Integer>> entry : map.entrySet()) {
-			response.add(Map.of("name", entry.getKey(), "data", entry.getValue()));
-		}
+		map.forEach((key, value) -> response.add(Map.of("name", key, "data", value)));
 		return response;
 	}
 
