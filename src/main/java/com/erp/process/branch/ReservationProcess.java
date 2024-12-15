@@ -33,8 +33,11 @@ public class ReservationProcess {
 	private MemberRepository memberRepository;
 	
 	//전체 자료 읽기
-	public List<Reservation> getData(){
-		return reservationRepository.findAll();
+	public List<ReservationDto> getData(){
+		return reservationRepository.findAll()
+				.stream()
+				.map(ReservationDto::fromEntity)
+				.collect(Collectors.toList());
 	}
 	
 	// 고객 데이터 조회
